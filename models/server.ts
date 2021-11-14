@@ -1,8 +1,9 @@
 import express, { Application } from 'express';
-import { Path } from '../interfaces/path.interface';
-
 import userRoutes from '../routes/user.route';
 import cors from 'cors';
+
+import { Path } from '../interfaces/path.interface';
+import db from '../database/connection';
 
 export class Server {
    private app: Application;
@@ -19,8 +20,19 @@ export class Server {
       // TODO: Middleware
       this.middlewares();
 
+      this.dbConnection();
+
       // TODO: Routes of my application
       this.routes();
+   }
+
+   public async dbConnection() {
+      try {
+         await db.authenticate();
+         console.log('Database online');
+      } catch (error) {
+         throw new Error('Error - DB');
+      }
    }
 
    public middlewares() {
