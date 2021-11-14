@@ -2,6 +2,7 @@ import express, { Application } from 'express';
 import { Path } from '../interfaces/path.interface';
 
 import userRoutes from '../routes/user.route';
+import cors from 'cors';
 
 export class Server {
    private app: Application;
@@ -15,8 +16,22 @@ export class Server {
          users: '/api/users',
       };
 
+      // TODO: Middleware
+      this.middlewares();
+
       // TODO: Routes of my application
       this.routes();
+   }
+
+   public middlewares() {
+      // CORS
+      this.app.use(cors());
+
+      // Read body
+      this.app.use(express.json());
+
+      // public folder
+      this.app.use(express.static('public'));
    }
 
    public listen() {
